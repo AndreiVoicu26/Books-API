@@ -5,23 +5,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("library/books")
+@RequestMapping("library")
 public class LibraryController {
 
     private LibraryService booksService = new LibraryService();
 
-    @PostMapping("/add-book")
+    @PostMapping("/books")
     public ResponseEntity<Void> addBook(@RequestBody Book book) {
         booksService.addBook(book);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/get-sorted-books")
+    @GetMapping("/books")
     public ResponseEntity<?> getAllBooksSortedByAuthorAndTitle() {
         return new ResponseEntity<>( booksService.getAllBooksSortedByAuthorAndTitle(), HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{title}")
+    @DeleteMapping("/book/{title}")
     public ResponseEntity<Void> deleteBook(@PathVariable String title) {
         for (Book book : booksService.getAllBooksSortedByAuthorAndTitle()) {
             if (book.getTitle().equals(title)) {
@@ -32,12 +32,12 @@ public class LibraryController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/search/{title}")
+    @GetMapping("/book/{title}")
     public ResponseEntity<?> searchBooksByTitle(@PathVariable String title) {
         return new ResponseEntity<>(booksService.searchBooksByTitle(title), HttpStatus.OK);
     }
 
-    @PatchMapping("/update-author/{title}/{newAuthor}")
+    @PatchMapping("/book/{title}/{newAuthor}")
     public ResponseEntity<Void> updateAuthor(@PathVariable String title, @PathVariable String newAuthor) {
         for (Book book : booksService.getAllBooksSortedByAuthorAndTitle()) {
             if (book.getTitle().equals(title)) {
